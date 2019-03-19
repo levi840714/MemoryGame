@@ -1,0 +1,46 @@
+body {
+	background-image: url(../../img/background.jpg);
+	background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: 100% 100%;
+ }
+h1 {
+   	font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+    margin-top: 10px;
+    display: inline-block;
+    width: 100%;
+    color: black;
+}
+h2,#error,#area {
+	font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+}
+
+#block {
+    background: #d5eeff;
+    margin: auto auto;
+    width: 600px;
+    height: 700px;
+    padding: 0 0 60px 0;
+    box-shadow: 0 25px 30px -13px rgba(40, 40, 40, 0.4);
+    border-radius: 10px;
+}
+.timer {
+  	line-height: 2em;
+  	font-size: 2em;
+  	text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+  	display: inline-flex;
+}
+.jst-hours {
+   	display: none;
+}
+img {
+  	border: 1px black inset;
+  	width: 150px;
+  	height: 100px;
+  	cursor: pointer;
+    transition: all 0.6s;
+}
+img:hover {
+	transform: scale(1.2);
+}
