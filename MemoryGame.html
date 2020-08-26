@@ -1,0 +1,110 @@
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>圖像記憶</title>
+	<script type="text/javascript" src="public/js/jquery.min.js"></script>
+	<script type="text/javascript" src="public/js/jquery.simple.timer.js?v4"></script>
+	<link href="public/css/bootstrap.css" rel="stylesheet" type="text/css">
+	</link>
+	<link href="public/css/style.css?v2" rel="stylesheet" type="text/css">
+	</link>
+</head>
+
+<body>
+	<center>
+		<h1>
+			圖像記憶測驗
+		</h1>
+		<h2>
+			請按下開始後，看以下圖片，2 分鐘後<br>
+			請依照提示在五次錯誤內選出剛才看過的 10 張圖片的位置
+		</h2>
+		<div id="block">
+			<div id="error" style="color: red;font-size: 30px;padding-bottom: 30px;"></div>
+			<div class="star" style="width: 400px;margin-bottom: 15px;"></div>
+			<div id="allimg" style="width:400px ;display: none;margin-bottom: 15px;">
+			</div>
+			<input type="button" id="start" class="btn btn-primary" value="開始"
+				style="width:120px;height:40px;font-size:20px;">
+			<input type="button" id="restart" class="btn btn-danger" value="­重新開始"
+				style="width:120px;height:40px;font-size:20px; display: none">
+			<div id="area" style="font-size: 30px; color: #FF0000"></div>
+			<div class="timer" data-minutes-left="2"></div>
+			<!-- <div class="timer" data-seconds-left="5"></div> -->
+		</div>
+	</center>
+
+	<script>
+		var index = "";
+		//把圖片名稱存成變數
+		var pic = { "light": "紅綠燈", "banana": "香蕉", "apple": "蘋果", "guava": "芭樂", "road1": "國道1號標誌", "bus": "公車", "line": "斑馬線", "walk": "行人標誌", "left": "待轉標誌", "car": "消防車", "ambulance": "救護車", "bicycle": "腳踏車", "bowl": "碗", "chopsticks": "筷子", "cup": "杯子", "fork": "叉子", "knife": "刀子", "motorcycle": "機車", "noparking": "禁止停車", "pen": "筆", "pumpkin": "南瓜", "scissors": "剪刀", "taxi": "計程車", "telephone": "電話", "toothbrush": "牙刷", "umbrella": "雨傘", "watermelon": "西瓜", "crosswalk": "行人穿越道" };
+		var picid = ["light", "banana", "apple", "guava", "road1", "bus", "line", "walk", "left", "car", "ambulance", "bicycle", "bowl", "chopsticks", "cup", "fork", "knife", "motorcycle", "noparking", "pen", "pumpkin", "scissors", "taxi", "telephone", "toothbrush", "umbrella", "watermelon", "crosswalk"];
+		//隨機抓出10張圖
+		var result = [];
+		var ranNum = 10;
+		for (var i = 0; i < ranNum; i++) {
+			$('.star').append('<img src="img/picstar.jpg">');
+			var ran = Math.floor(Math.random() * picid.length);
+			$('#allimg').append('<img src="img/' + picid[ran] + '.jpg" id="' + picid[ran] + '">');
+			result.push(picid.splice(ran, 1)[0]);
+		};
+		console.log(result);
+		
+		//按下開始
+		$('#start').click(function (event) {
+			$('.star').hide(); //隱藏星星
+			$('#allimg').show(); //顯示出記憶圖片
+			$('#start').hide(); //隱藏開始
+			$('#restart').show(); //顯示開始
+			//計數器計時2分鐘
+			$('.timer').startTimer({
+				//倒數結束後要做的事
+				onComplete: function (element) {
+					$('img').attr('src', 'img/picstar.jpg'); //圖片蓋住
+					$(this).hide(); //隱藏計數器
+					pick(); //執行選擇圖片的函數
+				}
+
+			})
+		});
+
+		//重新開始鈕
+		$('#restart').on('click', function (event) {
+			location.reload();
+		});
+		
+		//選擇圖片方式
+		var count = 0;
+		function pick() {
+			if (result.length > 0) { //判斷圖片變數是否還有值
+				var index = Math.floor(Math.random() * result.length); //隨機選出一個變數內圖片
+				$('#area').html('請選出' + pic[result[index]]); //底下印出此選擇圖片的文字
+				$('#allimg').unbind('click').on('click', function (e) {
+					var thispic = result[index];// 現在該選擇圖片
+					var choice = e.target.id; //被點選的圖片
+					if (choice != thispic) { //如果點的不是該選的圖片就計算錯誤
+						if (result.indexOf(choice) != -1) { //已被選對的圖片不計算
+							count++;
+							$('#error').html('選擇錯誤：' + count + '次');
+							if (count >= 5) { //選錯5次以上則終止
+								$('img').hide();
+								$('#area').hide();
+								$('#error').html('請重新挑戰!');
+							}
+						}
+					} else { //點選的是該選擇圖片的動作
+						$('#' + result[index]).attr('src', 'img/' + result[index] + '.jpg'); //點擊後更換回原來圖片
+						result.splice(index, 1); //當此圖片被點擊後從變數內刪除
+						pick(); //再重新執行一次直到變數內沒有值
+					}
+				});
+			} else if (result.length == 0) { //圖片變數內的值為空 則底下文字印出完成!
+				$('#area').html('完成!');
+				$('#next').show();
+			}
+		}
+	</script>
+</body>
+
+</html>
